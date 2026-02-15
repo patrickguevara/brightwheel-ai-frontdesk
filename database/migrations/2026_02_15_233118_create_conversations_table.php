@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('resolved_by')->nullable()->constrained('users');
             $table->timestamps();
 
-            $table->index('session_id');
             $table->index('status');
         });
     }

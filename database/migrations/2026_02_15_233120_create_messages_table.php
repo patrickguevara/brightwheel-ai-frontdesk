@@ -13,13 +13,12 @@ return new class extends Migration
             $table->foreignUuid('conversation_id')->constrained('conversations')->cascadeOnDelete();
             $table->enum('role', ['parent', 'assistant', 'operator']);
             $table->text('content');
-            $table->float('confidence_score')->nullable();
+            $table->decimal('confidence_score', 5, 4)->nullable();
             $table->json('source_references')->nullable();
             $table->boolean('flagged')->default(false);
             $table->text('flag_reason')->nullable();
             $table->timestamps();
 
-            $table->index('conversation_id');
             $table->index('role');
             $table->index('flagged');
         });
