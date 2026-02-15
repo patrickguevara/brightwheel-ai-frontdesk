@@ -17,7 +17,9 @@ class ConversationFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'session_id' => $this->faker->uuid(),
+            'parent_name' => $this->faker->name(),
+            'status' => 'active',
         ];
     }
 }

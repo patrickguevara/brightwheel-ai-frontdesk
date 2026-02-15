@@ -17,7 +17,12 @@ class KnowledgeBaseFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'category' => 'general',
+            'title' => $this->faker->sentence(),
+            'content' => $this->faker->paragraph(),
+            'keywords' => [$this->faker->word(), $this->faker->word()],
+            'is_active' => true,
+            'is_seasonal' => false,
         ];
     }
 }
