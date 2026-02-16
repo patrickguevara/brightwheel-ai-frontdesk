@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\Operator\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -18,5 +19,11 @@ Route::get('dashboard', function () {
 
 Route::post('/api/chat', [ChatController::class, 'sendMessage'])->name('chat.send');
 Route::get('/api/chat/{sessionId}', [ChatController::class, 'getConversation'])->name('chat.show');
+
+Route::middleware(['auth'])->prefix('operator')->name('operator.')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/conversations', [DashboardController::class, 'conversations'])->name('conversations');
+    Route::get('/knowledge-base', [DashboardController::class, 'knowledgeBase'])->name('knowledge-base');
+});
 
 require __DIR__.'/settings.php';
