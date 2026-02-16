@@ -2,6 +2,7 @@
 import { Head } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import Sidebar from '@/components/operator/Sidebar.vue';
+import KnowledgeBaseModal from '@/components/operator/KnowledgeBaseModal.vue';
 
 interface KnowledgeItem {
     id: string;
@@ -11,6 +12,7 @@ interface KnowledgeItem {
     is_active: boolean;
     updated_at: string;
     updated_by_name: string | null;
+    category: string;
 }
 
 interface Props {
@@ -20,6 +22,8 @@ interface Props {
 defineProps<Props>();
 
 const expandedCategories = ref<Record<string, boolean>>({});
+const showModal = ref(false);
+const editingEntry = ref<KnowledgeItem | null>(null);
 
 const toggleCategory = (category: string) => {
     expandedCategories.value[category] = !expandedCategories.value[category];
@@ -32,6 +36,26 @@ const formatDate = (dateString: string) => {
         day: 'numeric',
         year: 'numeric',
     });
+};
+
+const openCreateModal = () => {
+    editingEntry.value = null;
+    showModal.value = true;
+};
+
+const openEditModal = (item: KnowledgeItem) => {
+    editingEntry.value = item;
+    showModal.value = true;
+};
+
+const closeModal = () => {
+    showModal.value = false;
+    editingEntry.value = null;
+};
+
+const handleSaved = () => {
+    // Reload the page to get fresh data
+    window.location.reload();
 };
 </script>
 
