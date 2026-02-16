@@ -35,4 +35,13 @@ class KnowledgeBaseController extends Controller
             'entry' => $knowledgeBase->fresh(),
         ]);
     }
+
+    public function destroy(KnowledgeBase $knowledgeBase): JsonResponse
+    {
+        $knowledgeBase->delete();
+
+        return response()->json([
+            'message' => 'Knowledge base entry deleted successfully',
+        ]);
+    }
 }

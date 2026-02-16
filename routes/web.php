@@ -27,6 +27,7 @@ Route::middleware(['auth'])->prefix('operator')->name('operator.')->group(functi
     Route::get('/knowledge-base', [DashboardController::class, 'knowledgeBase'])->name('knowledge-base');
     Route::post('/knowledge-base', [KnowledgeBaseController::class, 'store'])->name('knowledge-base.store');
     Route::put('/knowledge-base/{knowledgeBase}', [KnowledgeBaseController::class, 'update'])->name('knowledge-base.update');
+    Route::delete('/knowledge-base/{knowledgeBase}', [KnowledgeBaseController::class, 'destroy'])->name('knowledge-base.destroy');
 });
 
 require __DIR__.'/settings.php';

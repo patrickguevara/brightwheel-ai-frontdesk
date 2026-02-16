@@ -84,3 +84,16 @@ test('authenticated user can update knowledge base entry', function () {
         ->and($entry->updated_by)->toBe($user->id)
         ->and($entry->is_active)->toBeFalse();
 });
+
+test('authenticated user can delete knowledge base entry', function () {
+    $user = User::factory()->create();
+    $entry = \App\Models\KnowledgeBase::factory()->create();
+
+    $response = $this->actingAs($user)->deleteJson("/operator/knowledge-base/{$entry->id}");
+
+    $response->assertStatus(200);
+
+    $this->assertDatabaseMissing('knowledge_base', [
+        'id' => $entry->id,
+    ]);
+});
