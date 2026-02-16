@@ -98,7 +98,7 @@ class ChatController extends Controller
     public function getConversation(string $sessionId): JsonResponse
     {
         $conversation = Conversation::where('session_id', $sessionId)
-            ->with('messages')
+            ->with(['messages' => fn ($query) => $query->orderBy('created_at')])
             ->firstOrFail();
 
         return response()->json([
