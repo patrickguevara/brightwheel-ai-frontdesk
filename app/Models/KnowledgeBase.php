@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -41,12 +42,12 @@ class KnowledgeBase extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
-    public function scopeActive($query)
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }
 
-    public function scopeByCategory($query, string $category)
+    public function scopeByCategory(Builder $query, string $category): Builder
     {
         return $query->where('category', $category);
     }

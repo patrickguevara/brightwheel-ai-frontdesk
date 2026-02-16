@@ -10,6 +10,9 @@ return [
     'confidence' => [
         'high_threshold' => 0.8,
         'medium_threshold' => 0.5,
+        'no_knowledge' => 0.3,
+        'single_knowledge' => 0.7,
+        'multiple_knowledge' => 0.9,
     ],
 
     'sensitive_keywords' => [

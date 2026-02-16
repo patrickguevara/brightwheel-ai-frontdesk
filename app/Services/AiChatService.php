@@ -5,6 +5,7 @@ namespace App\Services;
 use Anthropic\Client;
 use App\Models\KnowledgeBase;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class AiChatService
@@ -19,11 +20,23 @@ class AiChatService
         $keywords = $this->extractKeywords($question);
 
         return KnowledgeBase::query()
+            ->where('is_active', true)
+            ->where(function ($query) {
+                $query->whereNull('effective_date')
+                    ->orWhere('effective_date', '<=', now());
+            })
+            ->where(function ($query) {
+                $query->whereNull('expiry_date')
+                    ->orWhere('expiry_date', '>=', now());
+            })
             ->where(function ($query) use ($keywords) {
                 foreach ($keywords as $keyword) {
+                    // Escape SQL wildcards to prevent injection
+                    $escapedKeyword = Str::replace(['%', '_'], ['\\%', '\\_'], $keyword);
+
                     $query->orWhereJsonContains('keywords', $keyword)
-                        ->orWhere('title', 'like', "%{$keyword}%")
-                        ->orWhere('content', 'like', "%{$keyword}%");
+                        ->orWhere('title', 'like', "%{$escapedKeyword}%")
+                        ->orWhere('content', 'like', "%{$escapedKeyword}%");
                 }
             })
             ->limit($limit)
@@ -84,6 +97,13 @@ class AiChatService
                 'escalated' => false,
             ];
         } catch (\Exception $e) {
+            Log::error('AI chat response generation failed', [
+                'exception' => $e->getMessage(),
+                'question' => $question,
+                'knowledge_count' => $knowledge->count(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
             return [
                 'content' => 'I apologize, but I encountered an error. Please try again or speak with an operator.',
                 'confidence' => 0.0,
@@ -149,14 +169,14 @@ PROMPT;
     public function calculateConfidence(Collection $knowledge): float
     {
         if ($knowledge->isEmpty()) {
-            return 0.3;
+            return config('ai.confidence.no_knowledge');
         }
 
         if ($knowledge->count() >= 2) {
-            return 0.9;
+            return config('ai.confidence.multiple_knowledge');
         }
 
-        return 0.7;
+        return config('ai.confidence.single_knowledge');
     }
 
     /**

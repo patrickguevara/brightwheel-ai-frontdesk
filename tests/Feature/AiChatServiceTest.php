@@ -21,6 +21,63 @@ test('it retrieves relevant knowledge for a question', function () {
     expect($knowledge->first()->title)->toBe('Hours of Operation');
 });
 
+test('it only retrieves active knowledge', function () {
+    KnowledgeBase::factory()->create([
+        'category' => 'hours',
+        'title' => 'Active Hours',
+        'content' => 'Open Monday-Friday 6:30 AM to 6:30 PM',
+        'keywords' => ['hours', 'open', 'close'],
+        'is_active' => true,
+    ]);
+
+    KnowledgeBase::factory()->create([
+        'category' => 'hours',
+        'title' => 'Inactive Hours',
+        'content' => 'Old schedule information',
+        'keywords' => ['hours', 'open', 'close'],
+        'is_active' => false,
+    ]);
+
+    $knowledge = $this->service->retrieveRelevantKnowledge('What are your hours?');
+
+    expect($knowledge)->toHaveCount(1);
+    expect($knowledge->first()->title)->toBe('Active Hours');
+});
+
+test('it filters knowledge by effective and expiry dates', function () {
+    // Current valid knowledge
+    KnowledgeBase::factory()->create([
+        'title' => 'Current Info',
+        'content' => 'Current information',
+        'keywords' => ['policy'],
+        'effective_date' => now()->subDays(5),
+        'expiry_date' => now()->addDays(5),
+    ]);
+
+    // Not yet effective
+    KnowledgeBase::factory()->create([
+        'title' => 'Future Info',
+        'content' => 'Future information',
+        'keywords' => ['policy'],
+        'effective_date' => now()->addDays(5),
+        'expiry_date' => null,
+    ]);
+
+    // Already expired
+    KnowledgeBase::factory()->create([
+        'title' => 'Expired Info',
+        'content' => 'Expired information',
+        'keywords' => ['policy'],
+        'effective_date' => now()->subDays(10),
+        'expiry_date' => now()->subDays(5),
+    ]);
+
+    $knowledge = $this->service->retrieveRelevantKnowledge('What is the policy?');
+
+    expect($knowledge)->toHaveCount(1);
+    expect($knowledge->first()->title)->toBe('Current Info');
+});
+
 test('it detects sensitive topics requiring escalation', function () {
     $result = $this->service->shouldEscalate('I want to schedule a tour');
 
