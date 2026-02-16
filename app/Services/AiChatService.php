@@ -19,7 +19,41 @@ class AiChatService
     {
         $keywords = $this->extractKeywords($question);
 
+        if (empty($keywords)) {
+            return collect();
+        }
+
+        // Build relevance score: keyword matches are weighted higher than content matches
+        $driver = config('database.default');
+        $connection = config("database.connections.{$driver}.driver");
+
+        $relevanceSelect = '';
+        foreach ($keywords as $index => $keyword) {
+            $escapedKeyword = Str::replace(['%', '_', "'"], ['\\%', '\\_', "\\'"], $keyword);
+
+            if ($index > 0) {
+                $relevanceSelect .= ' + ';
+            }
+
+            // Use database-specific JSON checking
+            if ($connection === 'sqlite') {
+                // SQLite doesn't have JSON_CONTAINS, so we only score on LIKE matches
+                $relevanceSelect .= "(
+                    CASE WHEN title LIKE '%{$escapedKeyword}%' THEN 5 ELSE 0 END +
+                    CASE WHEN content LIKE '%{$escapedKeyword}%' THEN 1 ELSE 0 END
+                )";
+            } else {
+                // MySQL/PostgreSQL have JSON_CONTAINS
+                $relevanceSelect .= "(
+                    CASE WHEN JSON_CONTAINS(keywords, '\"{$escapedKeyword}\"') THEN 10 ELSE 0 END +
+                    CASE WHEN title LIKE '%{$escapedKeyword}%' THEN 5 ELSE 0 END +
+                    CASE WHEN content LIKE '%{$escapedKeyword}%' THEN 1 ELSE 0 END
+                )";
+            }
+        }
+
         return KnowledgeBase::query()
+            ->selectRaw("*, ({$relevanceSelect}) as relevance_score")
             ->where('is_active', true)
             ->where(function ($query) {
                 $query->whereNull('effective_date')
@@ -31,7 +65,6 @@ class AiChatService
             })
             ->where(function ($query) use ($keywords) {
                 foreach ($keywords as $keyword) {
-                    // Escape SQL wildcards to prevent injection
                     $escapedKeyword = Str::replace(['%', '_'], ['\\%', '\\_'], $keyword);
 
                     $query->orWhereJsonContains('keywords', $keyword)
@@ -39,6 +72,7 @@ class AiChatService
                         ->orWhere('content', 'like', "%{$escapedKeyword}%");
                 }
             })
+            ->orderByDesc('relevance_score')
             ->limit($limit)
             ->get();
     }
@@ -122,7 +156,7 @@ class AiChatService
      */
     private function extractKeywords(string $question): array
     {
-        $stopWords = ['what', 'when', 'where', 'who', 'how', 'is', 'are', 'the', 'a', 'an', 'do', 'does', 'can', 'could', 'would', 'your', 'you', 'we', 'us', 'our', 'have', 'has', 'had', 'be', 'been', 'being', 'will', 'shall', 'should', 'may', 'might', 'must'];
+        $stopWords = ['what', 'when', 'where', 'who', 'how', 'is', 'are', 'the', 'a', 'an', 'do', 'does', 'can', 'could', 'would', 'your', 'you', 'we', 'us', 'our', 'have', 'has', 'had', 'be', 'been', 'being', 'will', 'shall', 'should', 'may', 'might', 'must', 'they', 'them', 'their', 'my', 'me', 'i'];
 
         $words = Str::of($question)
             ->lower()
