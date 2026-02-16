@@ -24,7 +24,7 @@ class SendMessageRequest extends FormRequest
         return [
             'message' => ['required', 'string', 'max:1000'],
             'session_id' => ['nullable', 'string', 'exists:conversations,session_id'],
-            'parent_name' => ['nullable', 'string', 'max:255'],
+            'parent_name' => ['required_without:session_id', 'string', 'max:255'],
         ];
     }
 }
