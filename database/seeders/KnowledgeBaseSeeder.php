@@ -12,6 +12,8 @@ class KnowledgeBaseSeeder extends Seeder
      */
     public function run(): void
     {
+        KnowledgeBase::truncate();
+
         $knowledge = [
             // Hours & Calendar
             [
@@ -122,7 +124,7 @@ class KnowledgeBaseSeeder extends Seeder
                 'category' => 'meals',
                 'title' => 'Meals Provided',
                 'content' => 'Little Oaks participates in the USDA Child and Adult Care Food Program (CACFP). The following meals are provided at no additional cost: Breakfast (7:00 – 7:30 AM), Morning snack (9:00 – 9:15 AM), Lunch (11:00 – 11:30 AM), Afternoon snack (2:00 – 2:30 PM). Weekly menus are posted in each classroom, on the parent board near the front entrance, and shared via Brightwheel on Fridays for the following week.',
-                'keywords' => ['meals', 'food', 'breakfast', 'lunch', 'snack', 'menu', 'cafcp'],
+                'keywords' => ['meals', 'food', 'breakfast', 'lunch', 'snack', 'menu', 'cacfp'],
             ],
             [
                 'category' => 'meals',
