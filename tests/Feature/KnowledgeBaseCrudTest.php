@@ -23,3 +23,39 @@ test('category must be valid enum value', function () {
     $response->assertStatus(422)
         ->assertJsonValidationErrors(['category']);
 });
+
+test('authenticated user can create knowledge base entry', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)->postJson('/operator/knowledge-base', [
+        'category' => 'hours',
+        'title' => 'Test Entry',
+        'content' => 'Test content here',
+        'keywords' => ['test', 'keyword'],
+        'is_active' => true,
+    ]);
+
+    $response->assertStatus(200);
+
+    $this->assertDatabaseHas('knowledge_base', [
+        'category' => 'hours',
+        'title' => 'Test Entry',
+        'content' => 'Test content here',
+        'updated_by' => $user->id,
+    ]);
+});
+
+test('keywords are stored as array', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)->postJson('/operator/knowledge-base', [
+        'category' => 'general',
+        'title' => 'Keywords Test',
+        'content' => 'Testing keywords',
+        'keywords' => ['key1', 'key2', 'key3'],
+    ]);
+
+    $entry = \App\Models\KnowledgeBase::where('title', 'Keywords Test')->first();
+
+    expect($entry->keywords)->toBe(['key1', 'key2', 'key3']);
+});
