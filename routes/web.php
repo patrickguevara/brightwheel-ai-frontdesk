@@ -3,12 +3,13 @@
 use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Laravel\Fortify\Features;
+
+Route::get('/chat', function () {
+    return Inertia::render('Chat');
+})->name('chat');
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canRegister' => Features::enabled(Features::registration()),
-    ]);
+    return redirect()->route('chat');
 })->name('home');
 
 Route::get('dashboard', function () {
