@@ -97,3 +97,11 @@ test('authenticated user can delete knowledge base entry', function () {
         'id' => $entry->id,
     ]);
 });
+
+test('unauthenticated user cannot access crud endpoints', function () {
+    $entry = \App\Models\KnowledgeBase::factory()->create();
+
+    $this->postJson('/operator/knowledge-base', [])->assertStatus(401);
+    $this->putJson("/operator/knowledge-base/{$entry->id}", [])->assertStatus(401);
+    $this->deleteJson("/operator/knowledge-base/{$entry->id}")->assertStatus(401);
+});

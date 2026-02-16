@@ -16,13 +16,20 @@ class KnowledgeBaseFactory extends Factory
      */
     public function definition(): array
     {
+        $categories = [
+            'hours', 'tuition', 'enrollment', 'health', 'meals',
+            'schedule', 'pickup', 'safety', 'classrooms', 'policies', 'general',
+        ];
+
         return [
-            'category' => 'general',
-            'title' => $this->faker->sentence(),
-            'content' => $this->faker->paragraph(),
-            'keywords' => [$this->faker->word(), $this->faker->word()],
+            'category' => fake()->randomElement($categories),
+            'title' => fake()->sentence(),
+            'content' => fake()->paragraphs(3, true),
+            'keywords' => [fake()->word(), fake()->word(), fake()->word()],
             'is_active' => true,
             'is_seasonal' => false,
+            'effective_date' => null,
+            'expiry_date' => null,
         ];
     }
 }
