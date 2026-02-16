@@ -154,7 +154,7 @@ const deleteEntry = async () => {
     <div v-if="show" class="fixed inset-0 z-50 overflow-y-auto">
         <!-- Backdrop -->
         <div
-            class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+            class="fixed inset-0 bg-gray-900 bg-opacity-30 transition-opacity"
             @click="close"
         ></div>
 
@@ -188,7 +188,7 @@ const deleteEntry = async () => {
                         </label>
                         <select
                             v-model="form.category"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 text-gray-900"
                         >
                             <option v-for="cat in categories" :key="cat" :value="cat">
                                 {{ cat.charAt(0).toUpperCase() + cat.slice(1) }}
@@ -207,7 +207,7 @@ const deleteEntry = async () => {
                         <input
                             v-model="form.title"
                             type="text"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 text-gray-900"
                             placeholder="Enter title"
                         />
                         <p v-if="errors.title" class="mt-1 text-sm text-red-600">
@@ -223,7 +223,7 @@ const deleteEntry = async () => {
                         <textarea
                             v-model="form.content"
                             rows="8"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 text-gray-900"
                             placeholder="Enter content"
                         ></textarea>
                         <p v-if="errors.content" class="mt-1 text-sm text-red-600">
@@ -239,7 +239,7 @@ const deleteEntry = async () => {
                         <textarea
                             v-model="form.keywords"
                             rows="3"
-                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 text-gray-900"
                             placeholder="Enter keywords, one per line"
                         ></textarea>
                         <p class="mt-1 text-xs text-gray-500">
