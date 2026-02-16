@@ -221,13 +221,16 @@ Edit `config/ai.php`:
 ### Production Checklist
 - [ ] Set `APP_ENV=production`
 - [ ] Set `APP_DEBUG=false`
-- [ ] Generate production app key
-- [ ] Configure production database
-- [ ] Add Anthropic API key
+- [ ] Generate production app key: `php artisan key:generate`
+- [ ] Configure production database credentials
+- [ ] Add Anthropic API key to `.env`
 - [ ] Run migrations: `php artisan migrate --force`
-- [ ] Seed knowledge base: `php artisan db:seed --class=KnowledgeBaseSeeder`
+- [ ] **Seed database:** `php artisan db:seed --force`
+  - ✅ Creates test user: `test@example.com` / `password`
+  - ✅ Seeds 48 knowledge base entries for "Little Oaks Preschool"
+  - 📝 Customize knowledge entries in operator dashboard after deployment
 - [ ] Build assets: `npm run build`
-- [ ] Configure queue worker for background jobs
+- [ ] Configure queue worker for background jobs (optional)
 - [ ] Set up SSL certificate
 - [ ] Configure caching (Redis recommended)
 

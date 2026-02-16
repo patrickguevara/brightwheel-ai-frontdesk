@@ -13,13 +13,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        // Create test/demo user
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
 
+        // Seed knowledge base with 48 entries for "Little Oaks Preschool"
         $this->call([
             KnowledgeBaseSeeder::class,
         ]);
