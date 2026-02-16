@@ -3,7 +3,7 @@
 return [
     'anthropic' => [
         'api_key' => env('ANTHROPIC_API_KEY'),
-        'model' => env('ANTHROPIC_MODEL', 'claude-3-opus-20240229'),
+        'model' => env('ANTHROPIC_MODEL', 'claude-haiku-4-5-20251001'),
         'max_tokens' => env('ANTHROPIC_MAX_TOKENS', 1024),
     ],
 
