@@ -4,12 +4,12 @@ const emit = defineEmits<{
 }>();
 
 const suggestedQuestions = [
-    "What are your hours?",
-    "Is there school on Veterans Day?",
+    'What are your hours?',
+    'Is there school on Veterans Day?',
     "What's the tuition for infants?",
-    "My child has a fever, can they come in?",
-    "Do you provide lunch?",
-    "What time is nap?",
+    'My child has a fever, can they come in?',
+    'Do you provide lunch?',
+    'What time is nap?',
 ];
 
 function handleQuestionClick(question: string) {

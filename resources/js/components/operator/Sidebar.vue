@@ -13,9 +13,21 @@ const isActive = (routeName: string) => {
 };
 
 const navLinks = [
-    { name: 'Dashboard', route: 'operator.dashboard', url: operator.dashboard.url() },
-    { name: 'Conversations', route: 'operator.conversations', url: operator.conversations.url() },
-    { name: 'Knowledge Base', route: 'operator.knowledge-base', url: operator.knowledgeBase.url() },
+    {
+        name: 'Dashboard',
+        route: 'operator.dashboard',
+        url: operator.dashboard.url(),
+    },
+    {
+        name: 'Conversations',
+        route: 'operator.conversations',
+        url: operator.conversations.url(),
+    },
+    {
+        name: 'Knowledge Base',
+        route: 'operator.knowledge-base',
+        url: operator.knowledgeBase.url(),
+    },
 ];
 </script>
 
@@ -24,9 +36,21 @@ const navLinks = [
         <!-- Logo Section -->
         <div class="border-b border-gray-800 p-6">
             <div class="flex items-center gap-3">
-                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-green-600">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                <div
+                    class="flex h-10 w-10 items-center justify-center rounded-lg bg-green-600"
+                >
+                    <svg
+                        class="h-6 w-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                        />
                     </svg>
                 </div>
                 <div>

@@ -66,8 +66,12 @@ const getStatusColor = (status: string) => {
             <div class="p-8">
                 <!-- Page Header -->
                 <div class="mb-8">
-                    <h1 class="text-3xl font-bold text-gray-900">Conversations</h1>
-                    <p class="mt-2 text-gray-600">View all parent conversations with the AI frontdesk</p>
+                    <h1 class="text-3xl font-bold text-gray-900">
+                        Conversations
+                    </h1>
+                    <p class="mt-2 text-gray-600">
+                        View all parent conversations with the AI frontdesk
+                    </p>
                 </div>
 
                 <!-- Conversations Table -->
@@ -75,19 +79,29 @@ const getStatusColor = (status: string) => {
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+                                >
                                     Parent / Session
                                 </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+                                >
                                     Status
                                 </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+                                >
                                     Messages
                                 </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+                                >
                                     Last Message
                                 </th>
-                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+                                >
                                     Created
                                 </th>
                             </tr>
@@ -98,38 +112,73 @@ const getStatusColor = (status: string) => {
                                 :key="conversation.id"
                                 class="hover:bg-gray-50"
                             >
-                                <td class="whitespace-nowrap px-6 py-4">
-                                    <div class="text-sm font-medium text-gray-900">
-                                        {{ conversation.parent_name || 'Anonymous' }}
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div
+                                        class="text-sm font-medium text-gray-900"
+                                    >
+                                        {{
+                                            conversation.parent_name ||
+                                            'Anonymous'
+                                        }}
                                     </div>
                                     <div class="text-xs text-gray-500">
-                                        {{ conversation.session_id.substring(0, 12) }}...
+                                        {{
+                                            conversation.session_id.substring(
+                                                0,
+                                                12,
+                                            )
+                                        }}...
                                     </div>
                                 </td>
-                                <td class="whitespace-nowrap px-6 py-4">
+                                <td class="px-6 py-4 whitespace-nowrap">
                                     <span
-                                        :class="getStatusColor(conversation.status)"
-                                        class="inline-flex rounded-full px-2 py-1 text-xs font-semibold leading-5"
+                                        :class="
+                                            getStatusColor(conversation.status)
+                                        "
+                                        class="inline-flex rounded-full px-2 py-1 text-xs leading-5 font-semibold"
                                     >
                                         {{ conversation.status }}
                                     </span>
                                 </td>
-                                <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-900">
+                                <td
+                                    class="px-6 py-4 text-sm whitespace-nowrap text-gray-900"
+                                >
                                     {{ conversation.message_count }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    <div v-if="conversation.last_message" class="max-w-md text-sm text-gray-500">
-                                        {{ conversation.last_message.substring(0, 80) }}
-                                        <span v-if="conversation.last_message.length > 80">...</span>
+                                    <div
+                                        v-if="conversation.last_message"
+                                        class="max-w-md text-sm text-gray-500"
+                                    >
+                                        {{
+                                            conversation.last_message.substring(
+                                                0,
+                                                80,
+                                            )
+                                        }}
+                                        <span
+                                            v-if="
+                                                conversation.last_message
+                                                    .length > 80
+                                            "
+                                            >...</span
+                                        >
                                     </div>
-                                    <div v-else class="text-sm text-gray-400">No messages</div>
+                                    <div v-else class="text-sm text-gray-400">
+                                        No messages
+                                    </div>
                                 </td>
-                                <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                                <td
+                                    class="px-6 py-4 text-sm whitespace-nowrap text-gray-500"
+                                >
                                     {{ formatDate(conversation.created_at) }}
                                 </td>
                             </tr>
                             <tr v-if="conversations.data.length === 0">
-                                <td colspan="5" class="px-6 py-8 text-center text-gray-500">
+                                <td
+                                    colspan="5"
+                                    class="px-6 py-8 text-center text-gray-500"
+                                >
                                     No conversations found
                                 </td>
                             </tr>
@@ -137,15 +186,30 @@ const getStatusColor = (status: string) => {
                     </table>
 
                     <!-- Pagination -->
-                    <div v-if="conversations.last_page > 1" class="border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+                    <div
+                        v-if="conversations.last_page > 1"
+                        class="border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
+                    >
                         <div class="flex items-center justify-between">
                             <div class="text-sm text-gray-700">
                                 Showing
-                                <span class="font-medium">{{ (conversations.current_page - 1) * conversations.per_page + 1 }}</span>
+                                <span class="font-medium">{{
+                                    (conversations.current_page - 1) *
+                                        conversations.per_page +
+                                    1
+                                }}</span>
                                 to
-                                <span class="font-medium">{{ Math.min(conversations.current_page * conversations.per_page, conversations.total) }}</span>
+                                <span class="font-medium">{{
+                                    Math.min(
+                                        conversations.current_page *
+                                            conversations.per_page,
+                                        conversations.total,
+                                    )
+                                }}</span>
                                 of
-                                <span class="font-medium">{{ conversations.total }}</span>
+                                <span class="font-medium">{{
+                                    conversations.total
+                                }}</span>
                                 results
                             </div>
                             <div class="flex gap-2">
@@ -163,8 +227,9 @@ const getStatusColor = (status: string) => {
                                     ]"
                                     :preserve-state="true"
                                     :preserve-scroll="true"
-                                    v-html="link.label"
-                                />
+                                >
+                                    <span v-html="link.label" />
+                                </Link>
                             </div>
                         </div>
                     </div>

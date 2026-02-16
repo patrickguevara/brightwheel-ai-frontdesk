@@ -17,7 +17,7 @@ interface Props {
     knowledgeByCategory: Record<string, KnowledgeItem[]>;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const expandedCategories = ref<Record<string, boolean>>({});
 
@@ -45,8 +45,12 @@ const formatDate = (dateString: string) => {
             <div class="p-8">
                 <!-- Page Header -->
                 <div class="mb-8">
-                    <h1 class="text-3xl font-bold text-gray-900">Knowledge Base</h1>
-                    <p class="mt-2 text-gray-600">Manage AI frontdesk knowledge and responses</p>
+                    <h1 class="text-3xl font-bold text-gray-900">
+                        Knowledge Base
+                    </h1>
+                    <p class="mt-2 text-gray-600">
+                        Manage AI frontdesk knowledge and responses
+                    </p>
                 </div>
 
                 <!-- Knowledge Sections -->
@@ -63,17 +67,34 @@ const formatDate = (dateString: string) => {
                         >
                             <div class="flex items-center gap-3">
                                 <svg
-                                    :class="{ 'rotate-90': expandedCategories[String(category)] }"
+                                    :class="{
+                                        'rotate-90':
+                                            expandedCategories[
+                                                String(category)
+                                            ],
+                                    }"
                                     class="h-5 w-5 text-gray-500 transition-transform"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
                                 >
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M9 5l7 7-7 7"
+                                    />
                                 </svg>
-                                <h2 class="text-lg font-semibold capitalize text-gray-900">{{ category }}</h2>
-                                <span class="rounded-full bg-gray-200 px-2 py-1 text-xs font-medium text-gray-700">
-                                    {{ items.length }} {{ items.length === 1 ? 'item' : 'items' }}
+                                <h2
+                                    class="text-lg font-semibold text-gray-900 capitalize"
+                                >
+                                    {{ category }}
+                                </h2>
+                                <span
+                                    class="rounded-full bg-gray-200 px-2 py-1 text-xs font-medium text-gray-700"
+                                >
+                                    {{ items.length }}
+                                    {{ items.length === 1 ? 'item' : 'items' }}
                                 </span>
                             </div>
                         </button>
@@ -88,10 +109,18 @@ const formatDate = (dateString: string) => {
                                 :key="item.id"
                                 class="px-6 py-4 hover:bg-gray-50"
                             >
-                                <div class="mb-2 flex items-start justify-between">
+                                <div
+                                    class="mb-2 flex items-start justify-between"
+                                >
                                     <div class="flex-1">
-                                        <div class="mb-1 flex items-center gap-2">
-                                            <h3 class="text-base font-semibold text-gray-900">{{ item.title }}</h3>
+                                        <div
+                                            class="mb-1 flex items-center gap-2"
+                                        >
+                                            <h3
+                                                class="text-base font-semibold text-gray-900"
+                                            >
+                                                {{ item.title }}
+                                            </h3>
                                             <span
                                                 v-if="!item.is_active"
                                                 class="rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-800"
@@ -107,9 +136,18 @@ const formatDate = (dateString: string) => {
                                         </div>
                                         <div class="mb-2 text-sm text-gray-600">
                                             {{ item.content.substring(0, 200) }}
-                                            <span v-if="item.content.length > 200">...</span>
+                                            <span
+                                                v-if="item.content.length > 200"
+                                                >...</span
+                                            >
                                         </div>
-                                        <div v-if="item.keywords && item.keywords.length > 0" class="mb-2 flex flex-wrap gap-1">
+                                        <div
+                                            v-if="
+                                                item.keywords &&
+                                                item.keywords.length > 0
+                                            "
+                                            class="mb-2 flex flex-wrap gap-1"
+                                        >
                                             <span
                                                 v-for="keyword in item.keywords"
                                                 :key="keyword"
@@ -119,7 +157,8 @@ const formatDate = (dateString: string) => {
                                             </span>
                                         </div>
                                         <div class="text-xs text-gray-500">
-                                            Last updated: {{ formatDate(item.updated_at) }}
+                                            Last updated:
+                                            {{ formatDate(item.updated_at) }}
                                             <span v-if="item.updated_by_name">
                                                 by {{ item.updated_by_name }}
                                             </span>
@@ -130,8 +169,13 @@ const formatDate = (dateString: string) => {
                         </div>
                     </div>
 
-                    <div v-if="Object.keys(knowledgeByCategory).length === 0" class="rounded-lg bg-white px-6 py-12 text-center shadow">
-                        <div class="text-gray-500">No knowledge base entries found</div>
+                    <div
+                        v-if="Object.keys(knowledgeByCategory).length === 0"
+                        class="rounded-lg bg-white px-6 py-12 text-center shadow"
+                    >
+                        <div class="text-gray-500">
+                            No knowledge base entries found
+                        </div>
                     </div>
                 </div>
             </div>

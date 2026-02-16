@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import { marked } from 'marked';
+import { computed } from 'vue';
 import type { Message } from '@/types/chat';
 
 const props = defineProps<{
@@ -41,13 +41,10 @@ const renderedContent = computed(() => {
         >
             <div
                 v-if="message.role === 'assistant'"
-                class="prose prose-sm max-w-none prose-p:my-2 prose-ul:my-2 prose-ol:my-2 prose-li:my-0"
+                class="prose prose-sm prose-p:my-2 prose-ul:my-2 prose-ol:my-2 prose-li:my-0 max-w-none"
                 v-html="renderedContent"
             />
-            <p
-                v-else
-                class="whitespace-pre-wrap text-sm"
-            >
+            <p v-else class="text-sm whitespace-pre-wrap">
                 {{ message.content }}
             </p>
 
@@ -58,7 +55,7 @@ const renderedContent = computed(() => {
                     message.confidence_score !== undefined &&
                     message.confidence_score < 0.5
                 "
-                class="mt-2 text-xs italic text-gray-500"
+                class="mt-2 text-xs text-gray-500 italic"
             >
                 I'm not completely sure about this answer. Please verify with
                 the staff.

@@ -64,7 +64,7 @@ async function sendMessage(content: string) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json',
+                Accept: 'application/json',
                 ...(csrfToken && { 'X-CSRF-TOKEN': csrfToken }),
             },
             body: JSON.stringify({
@@ -116,7 +116,9 @@ function startChat() {
 <template>
     <Head title="Chat with Little Oaks" />
 
-    <div class="flex h-screen flex-col bg-gradient-to-br from-green-50 to-yellow-50">
+    <div
+        class="flex h-screen flex-col bg-gradient-to-br from-green-50 to-yellow-50"
+    >
         <!-- Header -->
         <header class="bg-white p-4 shadow-sm">
             <div class="mx-auto flex max-w-4xl items-center gap-3">
@@ -137,10 +139,7 @@ function startChat() {
         </header>
 
         <!-- Messages Area -->
-        <div
-            ref="messagesContainer"
-            class="flex-1 overflow-y-auto"
-        >
+        <div ref="messagesContainer" class="flex-1 overflow-y-auto">
             <div class="mx-auto max-w-4xl p-4">
                 <!-- Name Collection Screen -->
                 <div
@@ -158,10 +157,7 @@ function startChat() {
                     <p class="mb-8 text-center text-gray-600">
                         I'm here to answer your questions about our preschool.
                     </p>
-                    <form
-                        class="w-full max-w-md"
-                        @submit.prevent="startChat"
-                    >
+                    <form class="w-full max-w-md" @submit.prevent="startChat">
                         <div class="mb-4">
                             <label
                                 for="name"
@@ -176,13 +172,13 @@ function startChat() {
                                 name="name"
                                 required
                                 maxlength="255"
-                                class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 placeholder:text-gray-400 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-600"
+                                class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 placeholder:text-gray-400 focus:border-green-600 focus:ring-2 focus:ring-green-600 focus:outline-none"
                                 placeholder="Enter your name"
                             />
                         </div>
                         <button
                             type="submit"
-                            class="w-full rounded-lg bg-green-600 px-4 py-2 font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600"
+                            class="w-full rounded-lg bg-green-600 px-4 py-2 font-medium text-white hover:bg-green-700 focus:ring-2 focus:ring-green-600 focus:outline-none"
                         >
                             Start Chat
                         </button>
@@ -213,10 +209,7 @@ function startChat() {
                 </div>
 
                 <!-- Messages -->
-                <div
-                    v-else
-                    class="space-y-4"
-                >
+                <div v-else class="space-y-4">
                     <ChatMessage
                         v-for="message in messages"
                         :key="message.id"
@@ -224,10 +217,7 @@ function startChat() {
                     />
 
                     <!-- Loading Indicator -->
-                    <div
-                        v-if="isLoading"
-                        class="flex justify-start"
-                    >
+                    <div v-if="isLoading" class="flex justify-start">
                         <div class="flex gap-3">
                             <div
                                 class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-600 text-white"
@@ -262,10 +252,7 @@ function startChat() {
             class="border-t border-gray-200 bg-white p-4"
         >
             <div class="mx-auto max-w-4xl">
-                <ChatInput
-                    :disabled="isLoading"
-                    @send-message="sendMessage"
-                />
+                <ChatInput :disabled="isLoading" @send-message="sendMessage" />
             </div>
         </div>
     </div>

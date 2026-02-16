@@ -39,7 +39,7 @@ function handleSubmit() {
         <button
             type="submit"
             :disabled="disabled || !input.trim()"
-            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-600 text-white transition-colors hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-600 text-white transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"
