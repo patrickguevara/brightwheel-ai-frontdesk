@@ -8,6 +8,9 @@ import type { ChatResponse, Message } from '@/types/chat';
 
 const messages = ref<Message[]>([]);
 const sessionId = ref<string | null>(null);
+const parentName = ref<string>('');
+const nameInput = ref<string>('');
+const hasStartedChat = ref(false);
 const isLoading = ref(false);
 const messagesContainer = ref<HTMLElement | null>(null);
 
@@ -67,6 +70,7 @@ async function sendMessage(content: string) {
             body: JSON.stringify({
                 message: content,
                 ...(sessionId.value && { session_id: sessionId.value }),
+                ...(!sessionId.value && { parent_name: parentName.value }),
             }),
         });
 
@@ -101,6 +105,12 @@ async function sendMessage(content: string) {
 function handleSuggestedQuestion(question: string) {
     sendMessage(question);
 }
+
+function startChat() {
+    if (!nameInput.value.trim()) return;
+    parentName.value = nameInput.value.trim();
+    hasStartedChat.value = true;
+}
 </script>
 
 <template>
@@ -132,9 +142,9 @@ function handleSuggestedQuestion(question: string) {
             class="flex-1 overflow-y-auto"
         >
             <div class="mx-auto max-w-4xl p-4">
-                <!-- Welcome Screen -->
+                <!-- Name Collection Screen -->
                 <div
-                    v-if="messages.length === 0 && !isLoading"
+                    v-if="!hasStartedChat"
                     class="flex flex-col items-center justify-center py-12"
                 >
                     <div
@@ -147,7 +157,53 @@ function handleSuggestedQuestion(question: string) {
                     </h2>
                     <p class="mb-8 text-center text-gray-600">
                         I'm here to answer your questions about our preschool.
-                        Try one of these:
+                    </p>
+                    <form
+                        class="w-full max-w-md"
+                        @submit.prevent="startChat"
+                    >
+                        <div class="mb-4">
+                            <label
+                                for="name"
+                                class="mb-2 block text-sm font-medium text-gray-700"
+                            >
+                                What's your name?
+                            </label>
+                            <input
+                                id="name"
+                                v-model="nameInput"
+                                type="text"
+                                name="name"
+                                required
+                                maxlength="255"
+                                class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-green-600 focus:outline-none focus:ring-2 focus:ring-green-600"
+                                placeholder="Enter your name"
+                            />
+                        </div>
+                        <button
+                            type="submit"
+                            class="w-full rounded-lg bg-green-600 px-4 py-2 font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600"
+                        >
+                            Start Chat
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Welcome Screen with Suggested Questions -->
+                <div
+                    v-else-if="messages.length === 0 && !isLoading"
+                    class="flex flex-col items-center justify-center py-12"
+                >
+                    <div
+                        class="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-600 text-white"
+                    >
+                        <span class="text-3xl font-bold">LO</span>
+                    </div>
+                    <h2 class="mb-2 text-2xl font-bold text-gray-800">
+                        Hi {{ parentName }}!
+                    </h2>
+                    <p class="mb-8 text-center text-gray-600">
+                        Ask me anything about Little Oaks, or try one of these:
                     </p>
                     <div class="w-full max-w-2xl">
                         <SuggestedQuestions
@@ -201,7 +257,10 @@ function handleSuggestedQuestion(question: string) {
         </div>
 
         <!-- Input Area -->
-        <div class="border-t border-gray-200 bg-white p-4">
+        <div
+            v-if="hasStartedChat"
+            class="border-t border-gray-200 bg-white p-4"
+        >
             <div class="mx-auto max-w-4xl">
                 <ChatInput
                     :disabled="isLoading"

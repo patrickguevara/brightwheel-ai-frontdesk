@@ -1,9 +1,18 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+import { marked } from 'marked';
 import type { Message } from '@/types/chat';
 
-defineProps<{
+const props = defineProps<{
     message: Message;
 }>();
+
+const renderedContent = computed(() => {
+    if (props.message.role === 'assistant') {
+        return marked.parse(props.message.content, { async: false });
+    }
+    return props.message.content;
+});
 </script>
 
 <template>
@@ -30,7 +39,17 @@ defineProps<{
                     : 'bg-white text-gray-800 shadow-sm',
             ]"
         >
-            <p class="whitespace-pre-wrap text-sm">{{ message.content }}</p>
+            <div
+                v-if="message.role === 'assistant'"
+                class="prose prose-sm max-w-none prose-p:my-2 prose-ul:my-2 prose-ol:my-2 prose-li:my-0"
+                v-html="renderedContent"
+            />
+            <p
+                v-else
+                class="whitespace-pre-wrap text-sm"
+            >
+                {{ message.content }}
+            </p>
 
             <!-- Low Confidence Warning -->
             <p
