@@ -119,6 +119,35 @@ const save = async () => {
         loading.value = false;
     }
 };
+
+const deleteEntry = async () => {
+    if (!confirm('Are you sure you want to delete this entry? This cannot be undone.')) {
+        return;
+    }
+
+    loading.value = true;
+
+    try {
+        const response = await fetch(`/operator/knowledge-base/${props.entry!.id}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to delete entry');
+        }
+
+        emit('saved');
+        emit('close');
+    } catch (error) {
+        console.error('Error deleting entry:', error);
+        errors.value = { general: 'Failed to delete entry. Please try again.' };
+    } finally {
+        loading.value = false;
+    }
+};
 </script>
 
 <template>
