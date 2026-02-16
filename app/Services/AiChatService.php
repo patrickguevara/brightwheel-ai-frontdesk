@@ -14,7 +14,7 @@ class AiChatService
     /**
      * Retrieve relevant knowledge base entries for a question.
      */
-    public function retrieveRelevantKnowledge(string $question, int $limit = 3): Collection
+    public function retrieveRelevantKnowledge(string $question, int $limit = 5): Collection
     {
         $keywords = $this->extractKeywords($question);
 
@@ -76,7 +76,7 @@ class AiChatService
             );
 
             $responseContent = $message->content[0]->text ?? '';
-            $confidence = $this->calculateConfidence($responseContent, $knowledge);
+            $confidence = $this->calculateConfidence($knowledge);
 
             return [
                 'content' => $responseContent,
@@ -144,16 +144,12 @@ PROMPT;
     }
 
     /**
-     * Calculate confidence score based on response and knowledge.
+     * Calculate confidence score based on knowledge.
      */
-    private function calculateConfidence(string $response, Collection $knowledge): float
+    public function calculateConfidence(Collection $knowledge): float
     {
         if ($knowledge->isEmpty()) {
             return 0.3;
-        }
-
-        if (Str::contains(Str::lower($response), ['don\'t have', 'not sure', 'unclear', 'don\'t know'])) {
-            return 0.4;
         }
 
         if ($knowledge->count() >= 2) {
