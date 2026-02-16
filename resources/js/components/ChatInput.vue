@@ -34,7 +34,7 @@ function handleSubmit() {
             type="text"
             :disabled="disabled"
             placeholder="Type your message..."
-            class="flex-1 rounded-full border-0 px-4 py-2 text-sm outline-none placeholder:text-gray-400 disabled:opacity-50"
+            class="flex-1 rounded-full border-0 px-4 py-2 text-sm text-gray-900 outline-none placeholder:text-gray-400 disabled:opacity-50"
         />
         <button
             type="submit"
