@@ -70,6 +70,8 @@ class AiChatService
                 'content' => $this->getEscalationMessage(),
                 'confidence' => 1.0,
                 'escalated' => true,
+                'escalation_reason' => 'sensitive_topic',
+                'source_references' => [],
             ];
         }
 
@@ -95,6 +97,7 @@ class AiChatService
                 'content' => $responseContent,
                 'confidence' => $confidence,
                 'escalated' => false,
+                'source_references' => $knowledge->pluck('id')->toArray(),
             ];
         } catch (\Exception $e) {
             Log::error('AI chat response generation failed', [
@@ -108,6 +111,8 @@ class AiChatService
                 'content' => 'I apologize, but I encountered an error. Please try again or speak with an operator.',
                 'confidence' => 0.0,
                 'escalated' => true,
+                'escalation_reason' => 'error',
+                'source_references' => [],
             ];
         }
     }
