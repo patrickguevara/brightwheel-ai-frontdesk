@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import operator from '@/routes/operator';
 
 interface Props {
     currentRoute: string;
@@ -13,9 +13,9 @@ const isActive = (routeName: string) => {
 };
 
 const navLinks = [
-    { name: 'Dashboard', route: 'operator.dashboard' },
-    { name: 'Conversations', route: 'operator.conversations' },
-    { name: 'Knowledge Base', route: 'operator.knowledge-base' },
+    { name: 'Dashboard', route: 'operator.dashboard', url: operator.dashboard.url() },
+    { name: 'Conversations', route: 'operator.conversations', url: operator.conversations.url() },
+    { name: 'Knowledge Base', route: 'operator.knowledge-base', url: operator.knowledgeBase.url() },
 ];
 </script>
 
@@ -41,7 +41,7 @@ const navLinks = [
             <Link
                 v-for="link in navLinks"
                 :key="link.route"
-                :href="route(link.route)"
+                :href="link.url"
                 :class="[
                     'flex items-center rounded-lg px-4 py-3 text-sm font-medium transition-colors',
                     isActive(link.route)
