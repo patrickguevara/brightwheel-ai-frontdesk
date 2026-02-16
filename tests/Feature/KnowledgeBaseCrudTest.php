@@ -59,3 +59,28 @@ test('keywords are stored as array', function () {
 
     expect($entry->keywords)->toBe(['key1', 'key2', 'key3']);
 });
+
+test('authenticated user can update knowledge base entry', function () {
+    $user = User::factory()->create();
+    $entry = \App\Models\KnowledgeBase::factory()->create([
+        'title' => 'Original Title',
+        'content' => 'Original content',
+    ]);
+
+    $response = $this->actingAs($user)->putJson("/operator/knowledge-base/{$entry->id}", [
+        'category' => 'general',
+        'title' => 'Updated Title',
+        'content' => 'Updated content',
+        'keywords' => ['updated'],
+        'is_active' => false,
+    ]);
+
+    $response->assertStatus(200);
+
+    $entry->refresh();
+
+    expect($entry->title)->toBe('Updated Title')
+        ->and($entry->content)->toBe('Updated content')
+        ->and($entry->updated_by)->toBe($user->id)
+        ->and($entry->is_active)->toBeFalse();
+});
