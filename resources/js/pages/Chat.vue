@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import { ref, nextTick, watch } from 'vue';
-import type { Message, ChatResponse } from '@/types/chat';
-import ChatMessage from '@/components/ChatMessage.vue';
+import { nextTick, ref, watch } from 'vue';
 import ChatInput from '@/components/ChatInput.vue';
+import ChatMessage from '@/components/ChatMessage.vue';
 import SuggestedQuestions from '@/components/SuggestedQuestions.vue';
+import type { ChatResponse, Message } from '@/types/chat';
 
 const messages = ref<Message[]>([]);
 const sessionId = ref<string | null>(null);
@@ -27,10 +27,23 @@ async function scrollToBottom() {
 
 watch(messages, () => {
     scrollToBottom();
-}, { deep: true });
+});
 
 async function sendMessage(content: string) {
     if (!content.trim()) return;
+
+    // Validate message length (matches backend validation)
+    if (content.length > 1000) {
+        const errorMessage: Message = {
+            id: `error-${Date.now()}`,
+            role: 'assistant',
+            content:
+                'Your message is too long. Please keep it under 1000 characters.',
+            created_at: new Date().toISOString(),
+        };
+        messages.value.push(errorMessage);
+        return;
+    }
 
     const parentMessage: Message = {
         id: `temp-${Date.now()}`,
