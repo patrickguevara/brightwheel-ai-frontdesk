@@ -69,6 +69,147 @@ const close = () => {
 </script>
 
 <template>
-    <!-- Will add template in next step -->
-    <div v-if="show">Modal Placeholder</div>
+    <div v-if="show" class="fixed inset-0 z-50 overflow-y-auto">
+        <!-- Backdrop -->
+        <div
+            class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+            @click="close"
+        ></div>
+
+        <!-- Modal -->
+        <div class="flex min-h-full items-center justify-center p-4">
+            <div
+                class="relative w-full max-w-2xl rounded-lg bg-white p-6 shadow-xl"
+                @click.stop
+            >
+                <!-- Header -->
+                <div class="mb-4 flex items-center justify-between">
+                    <h2 class="text-xl font-semibold text-gray-900">
+                        {{ isEditMode ? 'Edit Knowledge Base Entry' : 'Create Knowledge Base Entry' }}
+                    </h2>
+                    <button
+                        @click="close"
+                        class="text-gray-400 hover:text-gray-600"
+                    >
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Form -->
+                <form @submit.prevent="save" class="space-y-4">
+                    <!-- Category -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">
+                            Category <span class="text-red-500">*</span>
+                        </label>
+                        <select
+                            v-model="form.category"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+                        >
+                            <option v-for="cat in categories" :key="cat" :value="cat">
+                                {{ cat.charAt(0).toUpperCase() + cat.slice(1) }}
+                            </option>
+                        </select>
+                        <p v-if="errors.category" class="mt-1 text-sm text-red-600">
+                            {{ errors.category }}
+                        </p>
+                    </div>
+
+                    <!-- Title -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">
+                            Title <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            v-model="form.title"
+                            type="text"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+                            placeholder="Enter title"
+                        />
+                        <p v-if="errors.title" class="mt-1 text-sm text-red-600">
+                            {{ errors.title }}
+                        </p>
+                    </div>
+
+                    <!-- Content -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">
+                            Content <span class="text-red-500">*</span>
+                        </label>
+                        <textarea
+                            v-model="form.content"
+                            rows="8"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+                            placeholder="Enter content"
+                        ></textarea>
+                        <p v-if="errors.content" class="mt-1 text-sm text-red-600">
+                            {{ errors.content }}
+                        </p>
+                    </div>
+
+                    <!-- Keywords -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">
+                            Keywords
+                        </label>
+                        <textarea
+                            v-model="form.keywords"
+                            rows="3"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500"
+                            placeholder="Enter keywords, one per line"
+                        ></textarea>
+                        <p class="mt-1 text-xs text-gray-500">
+                            Enter one keyword per line
+                        </p>
+                    </div>
+
+                    <!-- Is Active Toggle -->
+                    <div class="flex items-center">
+                        <input
+                            v-model="form.is_active"
+                            type="checkbox"
+                            class="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
+                        />
+                        <label class="ml-2 block text-sm text-gray-700">
+                            Active
+                        </label>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="flex justify-between pt-4">
+                        <button
+                            v-if="isEditMode"
+                            type="button"
+                            @click="deleteEntry"
+                            :disabled="loading"
+                            class="rounded-md bg-red-600 px-4 py-2 text-white hover:bg-red-700 disabled:opacity-50"
+                        >
+                            Delete
+                        </button>
+                        <div v-else></div>
+
+                        <div class="flex gap-2">
+                            <button
+                                type="button"
+                                @click="close"
+                                :disabled="loading"
+                                class="rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
+                                :disabled="loading"
+                                class="rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700 disabled:opacity-50"
+                            >
+                                {{ loading ? 'Saving...' : 'Save' }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </template>
