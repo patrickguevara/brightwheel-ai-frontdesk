@@ -68,13 +68,21 @@ const handleSaved = () => {
         <main class="flex-1 overflow-y-auto">
             <div class="p-8">
                 <!-- Page Header -->
-                <div class="mb-8">
-                    <h1 class="text-3xl font-bold text-gray-900">
-                        Knowledge Base
-                    </h1>
-                    <p class="mt-2 text-gray-600">
-                        Manage AI frontdesk knowledge and responses
-                    </p>
+                <div class="mb-8 flex items-center justify-between">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-900">
+                            Knowledge Base
+                        </h1>
+                        <p class="mt-2 text-gray-600">
+                            Manage AI frontdesk knowledge and responses
+                        </p>
+                    </div>
+                    <button
+                        @click="openCreateModal"
+                        class="rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+                    >
+                        + New Entry
+                    </button>
                 </div>
 
                 <!-- Knowledge Sections -->
@@ -188,6 +196,12 @@ const handleSaved = () => {
                                             </span>
                                         </div>
                                     </div>
+                                    <button
+                                        @click="openEditModal(item)"
+                                        class="ml-4 rounded-md bg-gray-100 px-3 py-1 text-sm text-gray-700 hover:bg-gray-200"
+                                    >
+                                        Edit
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -204,5 +218,13 @@ const handleSaved = () => {
                 </div>
             </div>
         </main>
+
+        <!-- Modal -->
+        <KnowledgeBaseModal
+            :show="showModal"
+            :entry="editingEntry"
+            @close="closeModal"
+            @saved="handleSaved"
+        />
     </div>
 </template>
