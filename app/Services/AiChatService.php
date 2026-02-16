@@ -122,7 +122,7 @@ class AiChatService
      */
     private function extractKeywords(string $question): array
     {
-        $stopWords = ['what', 'when', 'where', 'who', 'how', 'is', 'are', 'the', 'a', 'an', 'do', 'does', 'can', 'could', 'would', 'your'];
+        $stopWords = ['what', 'when', 'where', 'who', 'how', 'is', 'are', 'the', 'a', 'an', 'do', 'does', 'can', 'could', 'would', 'your', 'you', 'we', 'us', 'our', 'have', 'has', 'had', 'be', 'been', 'being', 'will', 'shall', 'should', 'may', 'might', 'must'];
 
         $words = Str::of($question)
             ->lower()
