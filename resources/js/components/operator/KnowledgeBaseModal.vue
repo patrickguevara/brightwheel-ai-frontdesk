@@ -66,6 +66,59 @@ watch(() => props.show, (show) => {
 const close = () => {
     emit('close');
 };
+
+const save = async () => {
+    loading.value = true;
+    errors.value = {};
+
+    // Convert keywords from textarea to array
+    const keywords = form.value.keywords
+        .split('\n')
+        .map(k => k.trim())
+        .filter(k => k.length > 0);
+
+    const data = {
+        category: form.value.category,
+        title: form.value.title,
+        content: form.value.content,
+        keywords,
+        is_active: form.value.is_active,
+    };
+
+    try {
+        const url = isEditMode.value
+            ? `/operator/knowledge-base/${props.entry!.id}`
+            : '/operator/knowledge-base';
+
+        const method = isEditMode.value ? 'PUT' : 'POST';
+
+        const response = await fetch(url, {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            if (response.status === 422) {
+                const errorData = await response.json();
+                errors.value = errorData.errors || {};
+                return;
+            }
+            throw new Error('Failed to save entry');
+        }
+
+        emit('saved');
+        emit('close');
+    } catch (error) {
+        console.error('Error saving entry:', error);
+        errors.value = { general: 'Failed to save entry. Please try again.' };
+    } finally {
+        loading.value = false;
+    }
+};
 </script>
 
 <template>
